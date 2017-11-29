@@ -6,4 +6,5 @@ export interface User {
     user: string;
     points: number;
     admin: boolean;
+    token: string;
 }

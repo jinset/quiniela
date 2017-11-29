@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "650382227319",
+    "firebase_url": "https://futquinela.firebaseio.com",
+    "project_id": "futquinela",
+    "storage_bucket": "futquinela.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650382227319:android:882d3d6bf336ffbd",
+        "android_client_info": {
+          "package_name": "com.jinsoft.futquiniela"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650382227319-emki2isjhc9a8p00ac2kf79kjam80igt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO4ce4mQIIjaiBG2HK8Kbfk2PZrnJ5GCc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
