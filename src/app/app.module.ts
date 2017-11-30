@@ -11,6 +11,8 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environment/environment';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { HttpModule } from '@angular/http';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -32,7 +34,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    AngularFireAuthModule 
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

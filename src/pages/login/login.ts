@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController  } from 'ionic-angular';
 import { User } from "../../models/user";
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
@@ -20,23 +20,45 @@ import { HomePage } from '../home/home';
 })
 export class LoginPage {
   user = {} as User;
-  constructor(private afd: AngularFireDatabase, private afAuth: AngularFireAuth,
-    public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private toastCtrl: ToastController, private afd: AngularFireDatabase, private afAuth: AngularFireAuth,
+    public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
   }
 
+  public loading = this.loadingCtrl.create({
+    content: "Cargando...",
+  });
+  
   async login(user: User) {
+    this.loading.present();
     try {
       const result = await this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password).then(data =>{
-        console.log(data.uid);
         this.navCtrl.setRoot(HomePage, {uid: data.uid});
+        this.loading.dismiss();
       });
     }
     catch (e) {
+      this.loading.dismiss();
       console.error(e);
+      this.presentToast("Correo electronico o contraseña no es valida");
+      
     }
   }
 
   signup(){
     this.navCtrl.push(SignupPage);
+  }
+
+  presentToast(msj) {
+    let toast = this.toastCtrl.create({
+      message: msj,
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 }

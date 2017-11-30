@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, IonicPage } from "ionic-angular";
+import { NavParams, NavController, IonicPage, LoadingController  } from "ionic-angular";
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+//import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+
 import firebase from 'firebase';
 declare var FCMPlugin;
 @IonicPage()
@@ -19,16 +22,16 @@ export class HomePage {
     })
     let uid = navParams.get('uid');
 
-    console.log(uid);
+    console.log(firebase.database.ServerValue.TIMESTAMP);
   }
   ionViewDidLoad() {
     FCMPlugin.onNotification(function (data) {
       if (data.wasTapped) {
         //Notification was received on device tray and tapped by the user.
-        alert(JSON.stringify(data));
+        //alert(JSON.stringify(data));
       } else {
         //Notification was received in foreground. Maybe the user needs to be notified.
-        alert(JSON.stringify(data));
+        //alert(JSON.stringify(data));
       }
     });
 

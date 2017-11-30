@@ -60,7 +60,7 @@ export class MyApp {
   pushObject.on('notification').subscribe((notification: any) => {
     if (notification.additionalData.foreground) {
       let youralert = this.alertCtrl.create({
-        title: 'New Push notification',
+        title: 'Nueva notificacion',
         message: notification.message
       });
       youralert.present();
