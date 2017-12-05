@@ -8,9 +8,14 @@
 </ion-header>
 
 <ion-content padding>
+
+    <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="myDate" (ngModelChange)="checkDate(myDate)"></ion-datetime>
+      </ion-item>
   <ion-list>
       <ion-item tappable *ngFor="let item of items | async">
-          {{ item }}
+          {{ item | json }}
         <!--<ion-thumbnail item-left>
           <img src="img/thumbnail-totoro.png">
         </ion-thumbnail>

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NavParams, NavController, IonicPage, LoadingController  } from "ionic-angular";
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 //import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
-
 import firebase from 'firebase';
 declare var FCMPlugin;
 @IonicPage()
@@ -15,14 +15,22 @@ declare var FCMPlugin;
 export class HomePage {
   firestore = firebase.database().ref('/pushtokens');
   firemsg = firebase.database().ref('/messages');
-
+  items: Observable<any[]>;
+  myDate: Date;
+  
   constructor(public navCtrl: NavController, public afd: AngularFireDatabase, public navParams: NavParams) {
     this.tokensetup().then((token) => {
       this.storetoken(token);
     })
     let uid = navParams.get('uid');
-
+    this.items = afd.list('teams').valueChanges();
     console.log(firebase.database.ServerValue.TIMESTAMP);
+  }
+
+  checkDate(date){
+    console.log(date);
+    let fecha = moment(date, 'yyyy-mm-dd').format('DD-mm-YYYY');
+    console.log(fecha);
   }
   ionViewDidLoad() {
     FCMPlugin.onNotification(function (data) {

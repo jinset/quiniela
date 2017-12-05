@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { User } from "../../models/user";
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-
+import { Storage } from '@ionic/storage';
 import { SignupPage } from '../signup/signup';
 import { HomePage } from '../home/home';
 /**
@@ -20,7 +20,7 @@ import { HomePage } from '../home/home';
 })
 export class LoginPage {
   user = {} as User;
-  constructor(private toastCtrl: ToastController, private afd: AngularFireDatabase, private afAuth: AngularFireAuth,
+  constructor(public storage: Storage, private toastCtrl: ToastController, private afd: AngularFireDatabase, private afAuth: AngularFireAuth,
     public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController) {
   }
 
@@ -32,6 +32,7 @@ export class LoginPage {
     this.loading.present();
     try {
       const result = await this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password).then(data =>{
+        this.storage.set('isLogged', data.uid);
         this.navCtrl.setRoot(HomePage, {uid: data.uid});
         this.loading.dismiss();
       });

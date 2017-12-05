@@ -6,25 +6,27 @@ import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
-
+import { Storage } from '@ionic/storage';
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-
-  rootPage: any = LoginPage;
-
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public push: Push, public alertCtrl: AlertController) {
-    this.initializeApp();
-
+  constructor(public storage: Storage, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public push: Push, public alertCtrl: AlertController) {
+    this.storage.get('isLogged').then(logged =>{
+      if(logged){
+        this.nav.setRoot(HomePage);
+      }else{
+        this.nav.setRoot(LoginPage);
+      }
+    })
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage }
     ];
-
+    this.initializeApp();
   }
 
   initializeApp() {
@@ -42,6 +44,7 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
 
   pushsetup() {
     const options: PushOptions = {
