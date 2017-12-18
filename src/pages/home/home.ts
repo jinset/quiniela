@@ -19,60 +19,48 @@ export class HomePage {
   //firemsg = firebase.database().ref('/messages');
   items: Observable<any[]>;
   li: Observable<any[]>;
-  
   myDate: Date;
   
-  constructor(public storage: Storage, public navCtrl: NavController, public afd: AngularFireDatabase, public navParams: NavParams) {
+  
+  constructor(public storage: Storage, public navCtrl: NavController, public afd: AngularFireDatabase, public navParams: NavParams, public loadingCtrl: LoadingController) {
     this.tokensetup().then((token) => {
       this.storetoken(token);
-    })
+    })    
     this.storage.get('isLogged').then(logged =>{
-      this.items = afd.list('betPerUser/29-11-2017/'+ logged).valueChanges();
+      this.items = afd.list('betPerUser/'+ logged + "/" + moment(this.myDate).format('DD-MM-YYYY')).valueChanges();
     })
+
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
   }
 
-  checkDate(date){
+  async checkDate(date){
     date = moment(date,'YYYY-MM-DD').format('DD-MM-YYYY');
-    this.addBets(date);
+    await this.storage.get('isLogged').then(logged =>{
+      this.addBets(date, logged);
+    })
+
+  
   }
 
-  addBets(date){
-    try {
+  async addBets(date, user){
+    return new Promise((resolve, reject) =>{
       this.li = this.afd.list('scorePerGames/'+date).valueChanges();
-      this.storage.get('isLogged').then(logged =>{
-        this.li.subscribe(li =>{
-          li.forEach(element =>{
-            //console.log('Item:', element.scoreA);
-            this.afd.list("betPerUser/"+logged+"/"+date).update(element.teamA+"-"+element.teamB,{
-              scoreA:0,
-              scoreB:0,
-              teamA: element.teamA,
-              teamB: element.teamB
-            })
-          })
-        })
-      })
-      
-      /*for (let i in li) {
-        console.log(li[i])
-        this.storage.get('isLogged').then(logged =>{
-          this.items = this.afd.list('betPerUser/29-11-2017/'+ logged).valueChanges();
-          this.afd.list(date+"/"+logged).update(this.items[i].teamA+"-"+this.items[i].teamB,{
+      this.li.subscribe(li =>{
+        li.forEach(element =>{
+          console.log(element);
+          //console.log('Item:', element.scoreA);
+          this.afd.list("betPerUser/"+user+"/"+date).update(element.teamA+"-"+element.teamB,{
             scoreA:0,
             scoreB:0,
-            teamA: this.items[i].teamA,
-            teamB: this.items[i].teamB
-          }).then(() => {
-            console.log('TAS');
-          }) 
+            teamA: element.teamA,
+            teamB: element.teamB,
+          })
         })
-          
-      }*/
-    } catch (error) {
-      console.log(error)
-    }
-   
-    
+        this.items = this.afd.list('betPerUser/'+ user + "/" + date).valueChanges();
+      })
+    })
   }
 
 
@@ -104,7 +92,16 @@ export class HomePage {
     })
     return promise;
   }
-
+  presentLoadingDefault() {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+  
+    loading.present();
+    loading.dismiss();
+    
+  }
+  
   storetoken(t) {
     this.afd.list("users/").update(firebase.auth().currentUser.uid,{
       devtoken: t

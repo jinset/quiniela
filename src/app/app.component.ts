@@ -6,6 +6,8 @@ import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
+import { ProfilePage } from '../pages/profile/profile';
+
 import { Storage } from '@ionic/storage';
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +26,9 @@ export class MyApp {
     })
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage }
+      { title: 'Inicio', component: HomePage },
+      { title: 'Perfil', component: ProfilePage }
+      
     ];
     this.initializeApp();
   }
@@ -40,6 +44,7 @@ export class MyApp {
   }
 
   openPage(page) {
+    console.log(page);
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);

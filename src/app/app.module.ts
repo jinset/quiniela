@@ -24,15 +24,18 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
+import { ProfilePage } from '../pages/profile/profile';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     LoginPage,
-    SignupPage
+    SignupPage,
+    ProfilePage
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     HomePage, 
     LoginPage,
-    SignupPage
+    SignupPage,
+    ProfilePage
   ],
   providers: [
     StatusBar,
