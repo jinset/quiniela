@@ -27,43 +27,40 @@ export class HomePage {
       this.storetoken(token);
     })    
     this.storage.get('isLogged').then(logged =>{
-      this.items = afd.list('betPerUser/'+ logged + "/" + moment(this.myDate).format('DD-MM-YYYY')).valueChanges();
+      this.addBets(moment(this.myDate).format('DD-MM-YYYY'), logged);
     })
-
-    let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
   }
-
+  public loading = this.loadingCtrl.create({
+    content: "Cargando...",
+  });
   async checkDate(date){
     date = moment(date,'YYYY-MM-DD').format('DD-MM-YYYY');
     await this.storage.get('isLogged').then(logged =>{
       this.addBets(date, logged);
-    })
-
-  
+    })  
   }
 
   async addBets(date, user){
     return new Promise((resolve, reject) =>{
+      this.loading.present();
       this.li = this.afd.list('scorePerGames/'+date).valueChanges();
       this.li.subscribe(li =>{
         li.forEach(element =>{
           console.log(element);
           //console.log('Item:', element.scoreA);
-          this.afd.list("betPerUser/"+user+"/"+date).update(element.teamA+"-"+element.teamB,{
+          this.afd.list("betPerUser/"+user+"/"+date).set(element.teamA+"-"+element.teamB,{
             scoreA:0,
             scoreB:0,
             teamA: element.teamA,
             teamB: element.teamB,
+            status: false
           })
         })
+        this.loading.dismissAll();
         this.items = this.afd.list('betPerUser/'+ user + "/" + date).valueChanges();
       })
     })
   }
-
-
 
 
   /**tokens */
