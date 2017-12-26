@@ -7,6 +7,9 @@ import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs/Observable';
 import firebase from 'firebase';
+
+import { SportmonksApi } from 'sportmonks';
+
 declare var FCMPlugin;
 @IonicPage()
 @Component({
