@@ -9,27 +9,30 @@
 
 <ion-content padding>
 
-    <ion-item>
-        <ion-label>Date</ion-label>
-        <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="myDate" (ngModelChange)="checkDate(myDate)"></ion-datetime>
-      </ion-item>
-  <ion-list>
-      <ion-item tappable *ngFor="let item of items | async">
-          {{ item | json }}
-        <!--<ion-thumbnail item-left>
-          <img src="img/thumbnail-totoro.png">
-        </ion-thumbnail>
-        <div class="textCenter">
-            <h2>0 - 0</h2>
-            <p>estado</p>
-        </div>
-
-        <ion-thumbnail item-right>
-            <img src="img/thumbnail-totoro.png">
-          </ion-thumbnail>-->
-      </ion-item>
-    </ion-list>
-    <div *ngIf="items?.length < 1">
-        no hay partidos
-      </div>
+  <ion-item class="dateItem">
+    <ion-label>Fecha: </ion-label>
+    <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="myDate" (ngModelChange)="checkDate(myDate)"></ion-datetime>
+  </ion-item>
+  <ion-slides pager>
+    <ion-slide tappable *ngFor="let item of items | async; let i = index; ">
+      {{ item.teamA }}
+      <ion-item *ngIf="item.status === false">
+          <ion-range min="0" max="10" pin="true" [(ngModel)]="self['modelScoreA']" name="range-A" color="secondary">
+              <ion-label range-left class="small-text">0</ion-label>
+              <ion-label range-right>{{self.modelScoreA+'i'}}</ion-label>
+          </ion-range>
+        </ion-item>
+      <br> {{ item.scoreA}}
+      <br> {{ item.teamB }}
+      <ion-item *ngIf="item.status === false">
+          <ion-range min="0" max="10" pin="true" [(ngModel)]="self['modelScoreB'+i]" name="range-B" color="secondary">
+              <ion-label range-left class="small-text">0</ion-label>
+              <ion-label range-right>{{self}}</ion-label>
+          </ion-range>
+        </ion-item>
+      <br> {{ item.scoreB}}
+      <br>
+      <button (click)="wa(i)" [disabled]="item.status === true">Aceptar</button>
+    </ion-slide>
+  </ion-slides>
 </ion-content>

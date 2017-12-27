@@ -2,5 +2,9 @@ page-home {
     .textCenter{
         text-align: center;
     }
+    .dateItem{
+        position: fixed;
+        z-index: 100 !important;
+    }
 
 }

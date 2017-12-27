@@ -17,13 +17,17 @@ declare var FCMPlugin;
   templateUrl: 'home.html'
 })
 
+
 export class HomePage {
   //firestore = firebase.database().ref('/pushtokens');
   //firemsg = firebase.database().ref('/messages');
   items: Observable<any[]>;
   li: Observable<any[]>;
   myDate: Date;
-  
+  private modelScoreA: number;
+  private modelScoreB: any;
+
+  //public sportmonks = new SportmonksApi("RgrjgSdEE4WjSUCfkrsHYvVfbC2JgKyeGddTc8CeXf7scEk8oYsLnnhc0N0A");
   
   constructor(public storage: Storage, public navCtrl: NavController, public afd: AngularFireDatabase, public navParams: NavParams, public loadingCtrl: LoadingController) {
     this.tokensetup().then((token) => {
@@ -32,7 +36,14 @@ export class HomePage {
     this.storage.get('isLogged').then(logged =>{
       this.addBets(moment(this.myDate).format('DD-MM-YYYY'), logged);
     })
+
+    
   }
+
+  get self() {
+    return this;
+  }
+
   public loading = this.loadingCtrl.create({
     content: "Cargando...",
   });
@@ -51,23 +62,37 @@ export class HomePage {
         li.forEach(element =>{
           console.log(element);
           //console.log('Item:', element.scoreA);
-          this.afd.list("betPerUser/"+user+"/"+date).set(element.teamA+"-"+element.teamB,{
-            scoreA:0,
-            scoreB:0,
-            teamA: element.teamA,
-            teamB: element.teamB,
-            status: false
+          let check = firebase.database().ref("betPerUser/"+user+"/"+date +"/"+element.teamA+"-"+element.teamB);
+          check.once("value").then(snap =>{
+            console.log(snap.exists())
+            if(!snap.exists()){
+              this.afd.list("betPerUser/"+user+"/"+date).set(element.teamA+"-"+element.teamB,{
+                scoreA:0,
+                scoreB:0,
+                teamA: element.teamA,
+                teamB: element.teamB,
+                status: false
+              })
+            }
           })
+
         })
         this.loading.dismissAll();
         this.items = this.afd.list('betPerUser/'+ user + "/" + date).valueChanges();
       })
     })
   }
-
+  wa(i){
+    console.log(this.modelScoreA[]])
+  }
 
   /**tokens */
   ionViewDidLoad() {
+
+  /**this.sportmonks.get('v2.0/countries/{id}', {id:13,competitions:true}).then(function(resp){
+    console.log(resp);
+  })*/
+
     FCMPlugin.onNotification(function (data) {
       if (data.wasTapped) {
         alert("tapped");
@@ -92,16 +117,7 @@ export class HomePage {
     })
     return promise;
   }
-  presentLoadingDefault() {
-    let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
-  
-    loading.present();
-    loading.dismiss();
-    
-  }
-  
+
   storetoken(t) {
     this.afd.list("users/").update(firebase.auth().currentUser.uid,{
       devtoken: t
