@@ -24,8 +24,8 @@ export class HomePage {
   items: Observable<any[]>;
   li: Observable<any[]>;
   myDate: Date;
-  private modelScoreA: number;
-  private modelScoreB: any;
+  private modelScoreA= 0;
+  private modelScoreB= 0;
 
   //public sportmonks = new SportmonksApi("RgrjgSdEE4WjSUCfkrsHYvVfbC2JgKyeGddTc8CeXf7scEk8oYsLnnhc0N0A");
   
@@ -82,8 +82,10 @@ export class HomePage {
       })
     })
   }
-  wa(i){
-    console.log(this.modelScoreA[]])
+
+
+  bet(a,b){
+    alert(a +"   "  + b);
   }
 
   /**tokens */
@@ -132,4 +134,6 @@ export class HomePage {
       alert('Message stored');
     })*/
   }
+
+
 }

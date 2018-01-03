@@ -17,22 +17,22 @@
     <ion-slide tappable *ngFor="let item of items | async; let i = index; ">
       {{ item.teamA }}
       <ion-item *ngIf="item.status === false">
-          <ion-range min="0" max="10" pin="true" [(ngModel)]="self['modelScoreA']" name="range-A" color="secondary">
+          <ion-range min="0" max="10" pin="true" [(ngModel)]="modelScoreA" name="range-A" color="secondary">
               <ion-label range-left class="small-text">0</ion-label>
-              <ion-label range-right>{{self.modelScoreA+'i'}}</ion-label>
+              <ion-label range-right>{{modelScoreA}}</ion-label>
           </ion-range>
         </ion-item>
       <br> {{ item.scoreA}}
       <br> {{ item.teamB }}
       <ion-item *ngIf="item.status === false">
-          <ion-range min="0" max="10" pin="true" [(ngModel)]="self['modelScoreB'+i]" name="range-B" color="secondary">
+          <ion-range min="0" max="10" pin="true" [(ngModel)]="modelScoreB" name="range-B" color="secondary">
               <ion-label range-left class="small-text">0</ion-label>
-              <ion-label range-right>{{self}}</ion-label>
+              <ion-label range-right>{{modelScoreB}}</ion-label>
           </ion-range>
         </ion-item>
       <br> {{ item.scoreB}}
       <br>
-      <button (click)="wa(i)" [disabled]="item.status === true">Aceptar</button>
+      <button (click)="bet(modelScoreA,modelScoreB)" [disabled]="item.status === true">Aceptar</button>
     </ion-slide>
   </ion-slides>
 </ion-content>

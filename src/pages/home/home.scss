@@ -3,7 +3,8 @@ page-home {
         text-align: center;
     }
     .dateItem{
-        position: fixed;
+        padding: 0 10px !important;
+        position: absolute;
         z-index: 100 !important;
     }
 
