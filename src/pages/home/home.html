@@ -32,7 +32,7 @@
         </ion-item>
       <br> {{ item.scoreB}}
       <br>
-      <button (click)="bet(modelScoreA,modelScoreB)" [disabled]="item.status === true">Aceptar</button>
+      <button (click)="bet(modelScoreA, item.teamA ,modelScoreB, item.teamB)" [disabled]="item.status === true">Aceptar</button>
     </ion-slide>
   </ion-slides>
 </ion-content>

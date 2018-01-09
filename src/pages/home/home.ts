@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, IonicPage, LoadingController  } from "ionic-angular";
+import { NavParams, NavController, IonicPage, LoadingController,AlertController   } from "ionic-angular";
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 //import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as moment from 'moment';
@@ -26,24 +26,21 @@ export class HomePage {
   myDate: Date;
   private modelScoreA= 0;
   private modelScoreB= 0;
+  private userLog: String;
 
   //public sportmonks = new SportmonksApi("RgrjgSdEE4WjSUCfkrsHYvVfbC2JgKyeGddTc8CeXf7scEk8oYsLnnhc0N0A");
   
-  constructor(public storage: Storage, public navCtrl: NavController, public afd: AngularFireDatabase, public navParams: NavParams, public loadingCtrl: LoadingController) {
+  constructor(private alertCtrl: AlertController, public storage: Storage, public navCtrl: NavController, public afd: AngularFireDatabase, public navParams: NavParams, public loadingCtrl: LoadingController) {
     this.tokensetup().then((token) => {
       this.storetoken(token);
     })    
     this.storage.get('isLogged').then(logged =>{
+      this.userLog = logged;
       this.addBets(moment(this.myDate).format('DD-MM-YYYY'), logged);
     })
 
     
   }
-
-  get self() {
-    return this;
-  }
-
   public loading = this.loadingCtrl.create({
     content: "Cargando...",
   });
@@ -84,8 +81,34 @@ export class HomePage {
   }
 
 
-  bet(a,b){
-    alert(a +"   "  + b);
+  bet(scoreA, teamA ,scoreB, teamB){
+    var date = moment(this.myDate ,'YYYY-MM-DD').format('DD-MM-YYYY');
+    let alert = this.alertCtrl.create({
+      title: 'confirmar',
+      message: 'Confirmar el marcador ' +teamA +":" + scoreA + " " + teamB + ":"+scoreB ,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            let check = firebase.database().ref("betPerUser/"+this.userLog+"/");
+            console.log('Buy clicked');
+            this.afd.list(check).update(date +"/"+teamA+"-"+teamB,{
+              scoreA:scoreA,
+              scoreB:scoreB,
+              status: true
+            })
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   /**tokens */
